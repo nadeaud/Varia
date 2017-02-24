@@ -35,6 +35,12 @@ parse_opt (int argc, char *argv[])
 void 
 sort_array (int *ar, unsigned int size) 
 {
+    unsigned int i;
+    printf("Before : ");
+    for (i = 0; i < size; i++)
+        printf("%d,", ar[i]);
+    printf("\n");
+    
     if (size <= 1)
         return;
 
@@ -48,41 +54,62 @@ sort_array (int *ar, unsigned int size)
         return;
     }
 
-    int pivot = ar[0];
-    int *left = ar[1];
-    int *right = ar[2];
+    int *pivot = &ar[0];
+    int *left = &ar[1];
+    int *right = &ar[size - 1];
+    int size_left = 0;
 
     while (left != right)
     {
-        while (*left < *pivot)
+        if (*left <= *pivot)
         {
             left++;
-            if (left == right)
-
-
-    unsigned int i,j;
-    int temp;
-
-    for (i = 0; i < size; i++)
-    {
-        for (j = 0; j < size - 1; j++)
-        {
-            if (array[j] > array[j + 1])
-            {
-                temp = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = temp;
-            }
+            size_left++;
+            continue;
         }
+        if (*right > *pivot)
+        {
+            right--;
+            continue;
+        }
+        int temp = *left;
+        *left = *right;
+        *right = temp;
     }
+
+    if (*left < *pivot)
+        size_left++;
+
+    if (size_left == size - 1)
+    {
+        int temp = *right;
+        *right = *pivot;
+        *pivot = temp;
+    }
+    else if (size_left > 0)
+    {
+        right--;
+        int temp = *right;
+        *right = *pivot;
+        *pivot = temp;
+    }
+    printf("After : ");
+    for (i = 0; i < size; i++)
+        printf("%d,", ar[i]);
+    printf("\n");
+    sort_array (&ar[0], size_left);
+    sort_array (left, size - size_left - 1);
+    
+    return;      
 }
 
 void
-display_array (unsigned int size)
+display_array (int *ar, unsigned int size)
 {
     unsigned int i;
     for (i = 0; i < size; i++)
-        printf("%d,", array[i]);
+        printf("%d,", ar[i]);
+    printf("\n");
 }
 
 int 
@@ -90,8 +117,8 @@ main (int argc, char *argv[])
 {
     unsigned int size = 20;
     fill_array (size);
-    sort_array (size);
-    display_array (size);
+    sort_array (array, size);
+    display_array (array, size);
 
     free (array);
     return 0;
