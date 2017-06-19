@@ -1,0 +1,7 @@
+Scripts to benchmark fast conditional breakpoints
+
+This script is to be used with the https://github.com/nadeaud/binutils-gdb repository. Either with the main branch to benchmark normal conditional breakpoints, or with commit ce52409d756f3c8cbeee15ee824fb3312e06a8a4.
+
+At the moment, the fast conditional breakpoints are not operationnal, but the impact of condition evaluation can be measured. If the condition is true and the program hits the breakpoint, GDB detects that it is in the IPA but register and error as there is no corresponding tracepoint and enters an infinite loop. Once this problem is solved, further modifications of GDB is needed to hide the IPA interactions, otherwise the user will see that the program is effectively stopped in the IPA.
+
+The conditional breakpoints can be installed using "cfbreak $linenumber if $condition". If the condition is always false, the conditional evaluation impact can be measured.
